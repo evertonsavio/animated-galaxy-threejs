@@ -101,7 +101,7 @@ const generateGalaxy = () =>
         vertexShader: vertexGalaxyShader,
         fragmentShader: fragmentGalaxyShader,
         uniforms: {
-            uSize: { value: 8.0 * renderer.getPixelRatio()}
+            uSize: { value: 10.0 * renderer.getPixelRatio()}
         }
     })
 
