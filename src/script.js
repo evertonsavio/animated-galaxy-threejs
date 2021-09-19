@@ -30,7 +30,7 @@ parameters.spin = 1
 parameters.randomness = 0.5
 parameters.randomnessPower = 3
 parameters.insideColor = '#ff6030'
-parameters.outsideColor = '#1b3984'
+parameters.outsideColor = '#074aff'
 
 let geometry = null
 let material = null
@@ -53,6 +53,7 @@ const generateGalaxy = () =>
     const positions = new Float32Array(parameters.count * 3)
     const colors = new Float32Array(parameters.count * 3)
     const scales = new Float32Array(parameters.count * 1)
+    const radomness = new Float32Array(parameters.count * 3)
 
     const insideColor = new THREE.Color(parameters.insideColor)
     const outsideColor = new THREE.Color(parameters.outsideColor)
@@ -66,13 +67,18 @@ const generateGalaxy = () =>
 
         const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2
 
+        positions[i3 + 0] = Math.cos(branchAngle) * radius
+        positions[i3 + 1] = 0.0
+        positions[i3 + 2] = Math.sin(branchAngle) * radius
+
+        //Radomness
         const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
         const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
         const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
 
-        positions[i3    ] = Math.cos(branchAngle) * radius + randomX
-        positions[i3 + 1] = randomY
-        positions[i3 + 2] = Math.sin(branchAngle) * radius + randomZ
+        radomness[i3 + 0] = randomX
+        radomness[i3 + 1] = randomY
+        radomness[i3 + 2] = randomZ
 
         // Color
         const mixedColor = insideColor.clone()
@@ -90,6 +96,7 @@ const generateGalaxy = () =>
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
     geometry.setAttribute('aScale', new THREE.BufferAttribute(colors, 1))
+    geometry.setAttribute('aRadomness', new THREE.BufferAttribute(radomness, 3))
 
     /**
      * Material
@@ -149,9 +156,9 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 2
+camera.position.x = 3
 camera.position.y = 1
-camera.position.z = 0
+camera.position.z = 0.5
 scene.add(camera)
 
 // Controls
